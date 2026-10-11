@@ -5,7 +5,7 @@ importScripts(`https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/pyodide
 async function init() {
   const pyodide = await loadPyodide();
   await pyodide.loadPackage(["micropip", "sqlite3"]);
-  await pyodide.pyimport("micropip").install("genanki");
+  await pyodide.pyimport("micropip").install("genanki==0.13.1");
 
   const response = await fetch(new URL("../python/converter.py", self.location.href));
   if (!response.ok) throw new Error(`converter.py: HTTP ${response.status}`);
