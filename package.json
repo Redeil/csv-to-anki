@@ -8,5 +8,8 @@
   "devDependencies": {
     "@tailwindcss/cli": "^4",
     "tailwindcss": "^4"
+  },
+  "overrides": {
+    "braces": "^3.0.3"
   }
 }
