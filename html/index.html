@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)">
+  <title>CSVtoAnki</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body class="flex min-h-dvh flex-col bg-slate-50 font-mono text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100 min-[700px]:h-dvh min-[700px]:overflow-hidden">
+  <header class="safe-top safe-x sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-slate-200 bg-white/80 pb-3 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
+    <span class="text-lg font-bold tracking-tight select-none">CSV<span class="text-indigo-500">to</span>Anki</span>
+
+    <div class="flex h-10 min-w-28 items-center justify-end">
+      <button id="convert-btn" type="button" disabled
+        class="inline-flex h-10 items-center rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100">
+        Convert
+      </button>
+      <div id="spinner" hidden role="status" class="flex h-10 w-10 items-center justify-center">
+        <span class="size-6 animate-spin rounded-full border-2 border-indigo-200 border-t-indigo-600 dark:border-indigo-900 dark:border-t-indigo-400"></span>
+        <span class="sr-only">Converting…</span>
+      </div>
+      <a id="download-link" hidden
+        class="inline-flex h-10 items-center rounded-lg bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-500 active:scale-95">
+        Download
+      </a>
+    </div>
+  </header>
+
+  <div id="error" hidden role="alert"
+    class="safe-x mt-4 text-sm text-red-700 dark:text-red-400"></div>
+
+  <main class="safe-x safe-bottom grid flex-1 grid-cols-1 gap-4 pt-4 min-[700px]:min-h-0 min-[700px]:grid-cols-2">
+    <section class="flex min-h-0 flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex items-end gap-4">
+        <label class="flex min-w-0 flex-1 flex-col gap-1">
+          <span class="text-xs font-medium tracking-wider text-slate-500 uppercase">Deck name</span>
+          <input id="deck-name" type="text" placeholder="My deck" autocomplete="off"
+            class="h-10 w-full rounded-lg border border-slate-300 bg-transparent px-3 text-base outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700">
+        </label>
+
+        <label class="flex shrink-0 cursor-pointer flex-col gap-1">
+          <span class="text-xs font-medium tracking-wider text-slate-500 uppercase">Has headers</span>
+          <span class="relative inline-flex h-10 items-center">
+            <input id="has-headers" type="checkbox" class="peer sr-only">
+            <span class="h-6 w-11 rounded-full bg-slate-300 transition peer-checked:bg-indigo-600 peer-focus-visible:ring-2 peer-focus-visible:ring-indigo-500/50 dark:bg-slate-700"></span>
+            <span class="pointer-events-none absolute left-0.5 size-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></span>
+          </span>
+        </label>
+      </div>
+
+      <label class="flex min-h-0 flex-1 flex-col gap-1">
+        <span class="text-xs font-medium tracking-wider text-slate-500 uppercase">CSV</span>
+        <textarea id="csv-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"
+          placeholder="question,answer&#10;What is the capital of France?,Paris"
+          class="min-h-[40vh] flex-1 resize-none rounded-lg border border-slate-300 bg-transparent p-3 text-base leading-relaxed outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700"></textarea>
+      </label>
+    </section>
+
+    <section class="flex min-h-0 flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-xs font-medium tracking-wider text-slate-500 uppercase">Preview</h2>
+        <span id="card-count" class="rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">0 cards</span>
+      </div>
+
+      <p id="preview-empty" class="m-auto py-12 text-center text-sm text-slate-400">Paste CSV to see a preview.</p>
+      <ol id="preview-list" class="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto"></ol>
+      <p id="preview-note" class="text-xs text-slate-500"></p>
+      <p id="engine-status" class="text-xs text-slate-400">Loading conversion engine…</p>
+    </section>
+  </main>
+
+  <template id="card-template">
+    <li class="rounded-xl border border-slate-200 p-3 dark:border-slate-800">
+      <p class="text-[0.65rem] font-semibold tracking-wider text-indigo-500 uppercase">Q</p>
+      <p data-question class="break-words whitespace-pre-wrap"></p>
+      <hr class="my-2 border-slate-200 dark:border-slate-800">
+      <p class="text-[0.65rem] font-semibold tracking-wider text-emerald-500 uppercase">A</p>
+      <p data-answer class="break-words whitespace-pre-wrap text-slate-600 dark:text-slate-300"></p>
+    </li>
+  </template>
+</body>
+</html>

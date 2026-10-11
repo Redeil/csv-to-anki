@@ -1,0 +1,21 @@
+@import "tailwindcss" source(none);
+@source "../html";
+@source "../js";
+
+@theme {
+  --font-mono: Consolas, "Cascadia Mono", "SF Mono", Menlo, "Liberation Mono", monospace;
+}
+
+/* Respect iPhone/iPad notches and home indicator. */
+.safe-x {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+.safe-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}

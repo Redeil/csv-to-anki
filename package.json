@@ -1,0 +1,12 @@
+{
+  "name": "csv-to-anki",
+  "private": true,
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "serve": "npm run build && python3 -m http.server 8000 -d _site"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4",
+    "tailwindcss": "^4"
+  }
+}
